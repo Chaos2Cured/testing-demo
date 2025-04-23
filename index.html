@@ -75,6 +75,10 @@
   let fps=0,frames=0,prev=performance.now();
   function loop(now){
     if(now-prev>1000){fps=frames;frames=0;prev=now;} frames++;
+       // ----- Cosmic Rainbow Pulse -----
+const pulse = 0.5 + 0.5 * Math.sin(now * 0.0005);   // slow 2 Hz breath
+ctx.globalAlpha = pulse * baseAlpha;                 // modulate overall glow
+// ---------------------------------
 
     ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,W,H);
     const extra=Math.min(4,Math.floor(Math.log2(zoom)));
@@ -86,6 +90,7 @@
     ctx.translate(W/2,H/2); ctx.scale(zoom,zoom);
     draw(depth,Math.min(W,H)/12,depth);
     hud.textContent=`FPS:${fps}  Zoom:${zoom.toFixed(2)}  Depth:${depth}  φ:${PHI.toFixed(3)}`;
+       ctx.globalAlpha = 1;   // reset for next frame & HUD text
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
